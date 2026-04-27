@@ -1,0 +1,12 @@
+include:
+  - "**/*.sv"
+  - "**/*.svh"
+
+exclude:
+  - "**/build/**"
+  - "**/sim/**"
+
+rules:
+  max_line_length:
+    enabled: true
+    max: 80
