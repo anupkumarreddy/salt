@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import logging
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+LOGGER = logging.getLogger("salt.config")
 
 
 DEFAULT_INCLUDE = ["**/*.sv", "**/*.svh"]
@@ -48,9 +51,11 @@ class SaltConfig:
 def load_config(config_path: str | None = None) -> SaltConfig:
     config = SaltConfig()
     if not config_path:
+        LOGGER.debug("No config path provided; using default configuration")
         return config
 
     path = Path(config_path)
+    LOGGER.info("Loading config from %s", path)
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
     if "include" in data:
@@ -65,4 +70,10 @@ def load_config(config_path: str | None = None) -> SaltConfig:
             merged_rules[rule_name] = base
         config.rules = merged_rules
 
+    LOGGER.debug(
+        "Loaded config: include=%d exclude=%d rules=%d",
+        len(config.include),
+        len(config.exclude),
+        len(config.rules),
+    )
     return config

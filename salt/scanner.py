@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 
 from salt.models import Block, Declaration, SourceFile
 from salt.utils.comment_stripper import strip_comments
+
+LOGGER = logging.getLogger("salt.scanner")
 
 
 DECLARATION_PATTERNS: dict[str, re.Pattern[str]] = {
@@ -18,11 +21,11 @@ TOKEN_PATTERN = re.compile(r"\b(always_ff|always_comb|begin|end|case[xz]?|endcas
 
 
 def scan_file(path: Path) -> SourceFile:
+    LOGGER.debug("Scanning file %s", path)
     raw_text = path.read_text(encoding="utf-8")
     clean_text = strip_comments(raw_text)
     lines = clean_text.splitlines()
-
-    return SourceFile(
+    source_file = SourceFile(
         path=path.as_posix(),
         raw_text=raw_text,
         clean_text=clean_text,
@@ -30,6 +33,14 @@ def scan_file(path: Path) -> SourceFile:
         declarations=_extract_declarations(clean_text),
         blocks=_extract_blocks(clean_text),
     )
+    LOGGER.debug(
+        "Scanned %s: lines=%d declarations=%d blocks=%d",
+        path,
+        len(lines),
+        len(source_file.declarations),
+        len(source_file.blocks),
+    )
+    return source_file
 
 
 def _extract_declarations(text: str) -> list[Declaration]:

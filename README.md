@@ -42,6 +42,7 @@ salt check <path>
 salt check . --config salt.yaml
 salt check ./tb ./rtl
 salt check . --format json
+salt check . --log-level info
 ```
 
 You can also run SALT directly as a module:
@@ -49,6 +50,8 @@ You can also run SALT directly as a module:
 ```bash
 python -m salt check .
 ```
+
+SALT writes lint results to `stdout`. Diagnostic logging is formatted and emitted to `stderr`, so JSON and text reports remain clean. Use `--log-level debug` or `--log-level info` when you want pipeline visibility.
 
 ## Configuration
 

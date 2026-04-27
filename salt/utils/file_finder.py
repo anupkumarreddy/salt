@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
+
+LOGGER = logging.getLogger("salt.finder")
 
 
 def discover_files(paths: list[str], include: list[str], exclude: list[str]) -> list[Path]:
@@ -9,10 +12,12 @@ def discover_files(paths: list[str], include: list[str], exclude: list[str]) -> 
 
     for raw_path in paths:
         base_path = Path(raw_path)
+        LOGGER.debug("Inspecting path %s", base_path)
         if base_path.is_file():
             found.add(base_path.resolve())
             continue
         if not base_path.exists():
+            LOGGER.warning("Path does not exist: %s", base_path)
             continue
 
         for pattern in include:
@@ -25,4 +30,10 @@ def discover_files(paths: list[str], include: list[str], exclude: list[str]) -> 
                 if match.is_file():
                     excluded.add(match.resolve())
 
-    return sorted(path for path in found if path not in excluded)
+    discovered = sorted(path for path in found if path not in excluded)
+    LOGGER.info(
+        "Discovered %d file(s) from %d input path(s)",
+        len(discovered),
+        len(paths),
+    )
+    return discovered
