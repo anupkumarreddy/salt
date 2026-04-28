@@ -24,7 +24,7 @@ SALT is a lightweight Python-based linter for SystemVerilog codebases. It is foc
 ## Current MVP Rules
 
 - Style: `no_tabs`, `trailing_whitespace`, `max_line_length`
-- Naming: `module_name`, `interface_name`, `package_name`, `class_name`
+- Naming: `module_name`, `interface_name`, `package_name`, `class_name`, `module_end_tag`, `interface_end_tag`, `package_end_tag`, `class_end_tag`
 - SystemVerilog: `no_casex`, `case_default`, `always_ff_nonblocking`, `always_comb_blocking`
 - UVM: `uvm_factory_macro`, `component_suffix`
 
