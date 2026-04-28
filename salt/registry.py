@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 from salt.rules.base import Rule
+from salt.rules.naming.class_end_tag import ClassEndTagRule
 from salt.rules.naming.class_name import ClassNameRule
+from salt.rules.naming.interface_end_tag import InterfaceEndTagRule
 from salt.rules.naming.interface_name import InterfaceNameRule
+from salt.rules.naming.module_end_tag import ModuleEndTagRule
 from salt.rules.naming.module_name import ModuleNameRule
+from salt.rules.naming.package_end_tag import PackageEndTagRule
 from salt.rules.naming.package_name import PackageNameRule
 from salt.rules.style.max_line_length import MaxLineLengthRule
 from salt.rules.style.no_tabs import NoTabsRule
@@ -24,6 +28,10 @@ RULES: list[type[Rule]] = [
     InterfaceNameRule,
     PackageNameRule,
     ClassNameRule,
+    ModuleEndTagRule,
+    InterfaceEndTagRule,
+    PackageEndTagRule,
+    ClassEndTagRule,
     NoCasexRule,
     CaseDefaultRule,
     AlwaysFfNonblockingRule,
