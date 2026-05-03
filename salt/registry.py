@@ -15,7 +15,9 @@ from salt.rules.style.trailing_whitespace import TrailingWhitespaceRule
 from salt.rules.sv.always_comb_blocking import AlwaysCombBlockingRule
 from salt.rules.sv.always_ff_nonblocking import AlwaysFfNonblockingRule
 from salt.rules.sv.case_default import CaseDefaultRule
+from salt.rules.sv.community import SV_COMMUNITY_RULES
 from salt.rules.sv.no_casex import NoCasexRule
+from salt.rules.uvm.community import UVM_COMMUNITY_RULES
 from salt.rules.uvm.component_suffix import ComponentSuffixRule
 from salt.rules.uvm.factory_macro import UvmFactoryMacroRule
 
@@ -36,8 +38,10 @@ RULES: list[type[Rule]] = [
     CaseDefaultRule,
     AlwaysFfNonblockingRule,
     AlwaysCombBlockingRule,
+    *SV_COMMUNITY_RULES,
     UvmFactoryMacroRule,
     ComponentSuffixRule,
+    *UVM_COMMUNITY_RULES,
 ]
 
 
