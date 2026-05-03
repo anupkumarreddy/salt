@@ -5,6 +5,7 @@ import logging
 from typing import Sequence
 
 from salt.logging_utils import configure_logging
+from salt.reporters.html_reporter import render_html
 from salt.reporters.json_reporter import render_json
 from salt.reporters.text_reporter import render_text
 from salt.runner import run
@@ -21,7 +22,7 @@ def build_parser() -> argparse.ArgumentParser:
     check_parser.add_argument("--config", help="Path to YAML config file.")
     check_parser.add_argument(
         "--format",
-        choices=("text", "json"),
+        choices=("text", "json", "html"),
         default="text",
         help="Reporter output format.",
     )
@@ -45,7 +46,12 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     LOGGER.info("Starting SALT check")
     result = run(args.paths, config_path=args.config)
-    output = render_json(result.violations) if args.format == "json" else render_text(result.violations)
+    if args.format == "json":
+        output = render_json(result.violations)
+    elif args.format == "html":
+        output = render_html(result.violations)
+    else:
+        output = render_text(result.violations)
     if output:
         print(output)
     LOGGER.info(
