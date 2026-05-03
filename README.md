@@ -19,14 +19,16 @@ SALT is a lightweight Python-based linter for SystemVerilog codebases. It is foc
 - YAML configuration via `PyYAML`
 - Modular rule architecture
 - Regex-based lightweight scanner
-- Text and JSON reporting
+- Text, JSON, and HTML reporting
 
-## Current MVP Rules
+## Rules
 
 - Style: `no_tabs`, `trailing_whitespace`, `max_line_length`
 - Naming: `module_name`, `interface_name`, `package_name`, `class_name`, `module_end_tag`, `interface_end_tag`, `package_end_tag`, `class_end_tag`
-- SystemVerilog: `no_casex`, `case_default`, `always_ff_nonblocking`, `always_comb_blocking`
-- UVM: `uvm_factory_macro`, `component_suffix`
+- SystemVerilog: core RTL checks plus 50 community guideline rules
+- UVM: core UVM checks plus 50 community guideline rules
+
+See [docs/rules.md](/Users/anupreddy/PycharmProjects/salt/docs/rules.md) for the full rule reference.
 
 ## Install
 
@@ -42,6 +44,7 @@ salt check <path>
 salt check . --config salt.yaml
 salt check ./tb ./rtl
 salt check . --format json
+salt check . --format html > salt-report.html
 salt check . --log-level info
 ```
 
