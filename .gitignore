@@ -21,6 +21,7 @@ pip-wheel-metadata/
 .coverage
 .coverage.*
 htmlcov/
+coverage.xml
 .mypy_cache/
 .ruff_cache/
 
@@ -35,3 +36,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Generated reports
+salt-report.html

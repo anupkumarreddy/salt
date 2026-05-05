@@ -28,13 +28,21 @@ SALT is a lightweight Python-based linter for SystemVerilog codebases. It is foc
 - SystemVerilog: core RTL checks plus 50 community guideline rules
 - UVM: core UVM checks plus 50 community guideline rules
 
-See [docs/rules.md](/Users/anupreddy/PycharmProjects/salt/docs/rules.md) for the full rule reference.
+See [docs/rules.md](docs/rules.md) for the full rule reference.
 
 ## Install
+
+From a local checkout:
 
 ```bash
 python3 -m venv .venv
 ./.venv/bin/pip install -e .
+```
+
+For development, install the optional test dependencies:
+
+```bash
+./.venv/bin/pip install -e ".[dev]"
 ```
 
 ## Usage
@@ -117,8 +125,36 @@ The SALT pipeline is:
 4. Collect violations
 5. Render output
 
-Core modules live under [salt/](/Users/anupreddy/PycharmProjects/salt/salt).
+Core modules live under [salt/](salt/).
+
+## Development
+
+Run the test suite with:
+
+```bash
+./.venv/bin/python -m pytest
+```
+
+Run the demo linter check with:
+
+```bash
+./.venv/bin/python -m salt check examples/demo --config examples/salt.yaml
+```
+
+The demo intentionally contains violations, so the command exits with status `1` when SALT finds them.
 
 ## Status
 
 This repository currently contains the MVP implementation of SALT with a modular foundation for adding new rules and reporters.
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, and pull request guidance.
+
+## Security
+
+Please report security issues privately. See [SECURITY.md](SECURITY.md).
+
+## License
+
+SALT is released under the [MIT License](LICENSE).
