@@ -35,6 +35,7 @@ def check_named_end_tag(
                     source_file,
                     line,
                     f"{display_name} '{declared_name}' is missing a named {end_keyword} tag",
+                    config=config,
                 )
             )
             continue
@@ -48,6 +49,7 @@ def check_named_end_tag(
                         f"{display_name} '{declared_name}' has mismatched {end_keyword} tag "
                         f"'{end_name}'"
                     ),
+                    config=config,
                 )
             )
 

@@ -33,6 +33,7 @@ class AlwaysFfNonblockingRule(Rule):
                         block.start_line + offset,
                         "always_ff should use nonblocking assignments ('<=')",
                         column=match.start() + 1,
+                        config=config,
                     )
                 )
         return violations

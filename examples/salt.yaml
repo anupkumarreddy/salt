@@ -10,3 +10,7 @@ rules:
   max_line_length:
     enabled: true
     max: 80
+    severity: error
+  module_name:
+    enabled: true
+    severity: warning

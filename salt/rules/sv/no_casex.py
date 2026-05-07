@@ -19,6 +19,6 @@ class NoCasexRule(Rule):
             match = re.search(r"\bcasex\b", line)
             if match:
                 violations.append(
-                    self.make_violation(source_file, line_number, "Usage of 'casex' is not allowed", match.start() + 1)
+                    self.make_violation(source_file, line_number, "Usage of 'casex' is not allowed", match.start() + 1, config=config)
                 )
         return violations

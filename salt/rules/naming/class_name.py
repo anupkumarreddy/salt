@@ -23,6 +23,7 @@ class ClassNameRule(Rule):
                         source_file,
                         declaration.line,
                         f"Class name '{declaration.name}' does not match required pattern",
+                        config=config,
                     )
                 )
         return violations

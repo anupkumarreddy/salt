@@ -30,6 +30,7 @@ class AlwaysCombBlockingRule(Rule):
                             block.start_line + offset,
                             "always_comb should use blocking assignments ('=')",
                             column=match.start() + 1,
+                            config=config,
                         )
                     )
         return violations
