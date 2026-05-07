@@ -16,8 +16,6 @@ def check_named_end_tag(
     end_keyword: str,
     display_name: str,
 ) -> list[Violation]:
-    del config
-
     pattern = re.compile(
         rf"^\s*{declaration_kind}\s+([A-Za-z_]\w*)\b.*?\b{end_keyword}\b(?:\s*:\s*([A-Za-z_]\w*))?",
         re.MULTILINE | re.DOTALL,
