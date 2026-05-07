@@ -33,6 +33,7 @@ class UvmFactoryMacroRule(Rule):
                     source_file,
                     line,
                     f"UVM class '{class_name}' is missing a factory registration macro",
+                    config=config,
                 )
             )
         return violations

@@ -12,6 +12,7 @@ LOGGER = logging.getLogger("salt.config")
 
 DEFAULT_INCLUDE = ["**/*.sv", "**/*.svh"]
 DEFAULT_EXCLUDE = ["**/build/**", "**/sim/**"]
+VALID_SEVERITIES = frozenset({"error", "warning", "info"})
 
 DEFAULT_RULES: dict[str, dict[str, Any]] = {
     "no_tabs": {"enabled": True},
@@ -71,6 +72,13 @@ def load_config(config_path: str | None = None) -> SaltConfig:
         for rule_name, rule_config in (data["rules"] or {}).items():
             base = merged_rules.get(rule_name, {}).copy()
             base.update(rule_config or {})
+            if "severity" in base:
+                severity = base["severity"]
+                if severity not in VALID_SEVERITIES:
+                    raise ValueError(
+                        f"Invalid severity '{severity}' for rule '{rule_name}'. "
+                        f"Valid values: {', '.join(sorted(VALID_SEVERITIES))}"
+                    )
             merged_rules[rule_name] = base
         config.rules = merged_rules
 

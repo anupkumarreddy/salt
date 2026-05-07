@@ -23,7 +23,11 @@ class Rule(ABC):
         message: str,
         column: int = 1,
         severity: str | None = None,
+        config: SaltConfig | None = None,
     ) -> Violation:
+        resolved_severity = severity or self.default_severity
+        if config is not None:
+            resolved_severity = config.rule_config(self.name).get("severity", resolved_severity)
         return Violation(
             rule_id=self.rule_id,
             rule_name=self.name,
@@ -31,5 +35,5 @@ class Rule(ABC):
             line=line,
             column=column,
             message=message,
-            severity=severity or self.default_severity,
+            severity=resolved_severity,
         )

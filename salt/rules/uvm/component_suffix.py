@@ -39,6 +39,7 @@ class ComponentSuffixRule(Rule):
                         source_file,
                         line,
                         f"Class '{class_name}' should end with '{expected_suffix}'",
+                        config=config,
                     )
                 )
         return violations

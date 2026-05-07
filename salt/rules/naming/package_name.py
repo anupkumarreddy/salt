@@ -23,6 +23,7 @@ class PackageNameRule(Rule):
                         source_file,
                         declaration.line,
                         f"Package name '{declaration.name}' does not match required pattern",
+                        config=config,
                     )
                 )
         return violations
