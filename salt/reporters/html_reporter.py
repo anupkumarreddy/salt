@@ -8,9 +8,12 @@ from salt.models import Violation
 
 def render_html(violations: list[Violation]) -> str:
     severity_counts = Counter(violation.severity for violation in violations)
-    rows = "\n".join(_render_row(violation) for violation in violations)
-    if not rows:
-        rows = '<tr><td colspan="7" class="empty">No violations found</td></tr>'
+    file_sections = "\n".join(
+        _render_file_section(file, file_violations)
+        for file, file_violations in _group_by_file(violations).items()
+    )
+    if not file_sections:
+        file_sections = '<div class="empty">No violations found</div>'
 
     return f"""<!doctype html>
 <html lang="en">
@@ -67,13 +70,47 @@ def render_html(violations: list[Violation]) -> str:
       font-size: 24px;
       line-height: 1.1;
     }}
-    table {{
-      width: 100%;
-      border-collapse: collapse;
+    .files {{
+      display: grid;
+      gap: 12px;
+    }}
+    details {{
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
+    }}
+    summary {{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 16px;
+      cursor: pointer;
+      font-weight: 700;
+    }}
+    summary::marker {{
+      color: var(--muted);
+    }}
+    .file-meta {{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 12px;
+    }}
+    .badge {{
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      background: #f8fafc;
+    }}
+    table {{
+      width: 100%;
+      border-collapse: collapse;
+      border-top: 1px solid var(--border);
     }}
     th, td {{
       padding: 10px 12px;
@@ -102,6 +139,9 @@ def render_html(violations: list[Violation]) -> str:
       color: var(--muted);
       text-align: center;
       padding: 36px 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
     }}
   </style>
 </head>
@@ -115,32 +155,56 @@ def render_html(violations: list[Violation]) -> str:
       <div class="stat"><strong>{severity_counts.get("warning", 0)}</strong>Warnings</div>
       <div class="stat"><strong>{severity_counts.get("info", 0)}</strong>Info</div>
     </section>
-    <table>
-      <thead>
-        <tr>
-          <th>File</th>
-          <th>Line</th>
-          <th>Column</th>
-          <th>Severity</th>
-          <th>Rule</th>
-          <th>Name</th>
-          <th>Message</th>
-        </tr>
-      </thead>
-      <tbody>
-{rows}
-      </tbody>
-    </table>
+    <section class="files" aria-label="Violations by file">
+{file_sections}
+    </section>
   </main>
 </body>
 </html>"""
 
 
+def _group_by_file(violations: list[Violation]) -> dict[str, list[Violation]]:
+    grouped: dict[str, list[Violation]] = {}
+    for violation in violations:
+        grouped.setdefault(violation.file, []).append(violation)
+    return grouped
+
+
+def _render_file_section(file: str, violations: list[Violation]) -> str:
+    counts = Counter(violation.severity for violation in violations)
+    rows = "\n".join(_render_row(violation) for violation in violations)
+    return f"""      <details>
+        <summary>
+          <code>{escape(file)}</code>
+          <span class="file-meta">
+            <span class="badge">{len(violations)} total</span>
+            <span class="badge severity-error">{counts.get("error", 0)} errors</span>
+            <span class="badge severity-warning">{counts.get("warning", 0)} warnings</span>
+            <span class="badge severity-info">{counts.get("info", 0)} info</span>
+          </span>
+        </summary>
+        <table>
+          <thead>
+            <tr>
+              <th>Line</th>
+              <th>Column</th>
+              <th>Severity</th>
+              <th>Rule</th>
+              <th>Name</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+{rows}
+          </tbody>
+        </table>
+      </details>"""
+
+
 def _render_row(violation: Violation) -> str:
     severity = escape(violation.severity)
     return (
-        "        <tr>"
-        f"<td><code>{escape(violation.file)}</code></td>"
+        "            <tr>"
         f"<td>{violation.line}</td>"
         f"<td>{violation.column}</td>"
         f'<td class="severity-{severity}">{severity}</td>'
