@@ -16,7 +16,5 @@ class NoTabsRule(Rule):
         for line_number, line in enumerate(source_file.raw_lines, start=1):
             column = line.find("\t")
             if column >= 0:
-                violations.append(
-                    self.make_violation(source_file, line_number, "Tab found", column=column + 1)
-                )
+                violations.append(self.make_violation(source_file, line_number, "Tab found", column=column + 1, config=config))
         return violations

@@ -19,7 +19,5 @@ class CaseDefaultRule(Rule):
             if block.kind != "case":
                 continue
             if not re.search(r"\bdefault\s*:", block.text):
-                violations.append(
-                    self.make_violation(source_file, block.start_line, "case missing default")
-                )
+                violations.append(self.make_violation(source_file, block.start_line, "case missing default", config=config))
         return violations

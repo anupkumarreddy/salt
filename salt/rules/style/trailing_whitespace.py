@@ -22,6 +22,7 @@ class TrailingWhitespaceRule(Rule):
                         line_number,
                         "Trailing whitespace found",
                         column=len(stripped) + 1,
+                        config=config,
                     )
                 )
         return violations

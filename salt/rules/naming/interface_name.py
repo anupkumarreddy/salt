@@ -23,6 +23,7 @@ class InterfaceNameRule(Rule):
                         source_file,
                         declaration.line,
                         f"Interface name '{declaration.name}' does not match required pattern",
+                        config=config,
                     )
                 )
         return violations

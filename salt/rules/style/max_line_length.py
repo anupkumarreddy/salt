@@ -22,6 +22,7 @@ class MaxLineLengthRule(Rule):
                         line_number,
                         f"Line exceeds maximum length of {limit}",
                         column=limit + 1,
+                        config=config,
                     )
                 )
         return violations

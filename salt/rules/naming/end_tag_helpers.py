@@ -16,8 +16,6 @@ def check_named_end_tag(
     end_keyword: str,
     display_name: str,
 ) -> list[Violation]:
-    del config
-
     pattern = re.compile(
         rf"^\s*{declaration_kind}\s+([A-Za-z_]\w*)\b.*?\b{end_keyword}\b(?:\s*:\s*([A-Za-z_]\w*))?",
         re.MULTILINE | re.DOTALL,
@@ -35,6 +33,7 @@ def check_named_end_tag(
                     source_file,
                     line,
                     f"{display_name} '{declared_name}' is missing a named {end_keyword} tag",
+                    config=config,
                 )
             )
             continue
@@ -48,6 +47,7 @@ def check_named_end_tag(
                         f"{display_name} '{declared_name}' has mismatched {end_keyword} tag "
                         f"'{end_name}'"
                     ),
+                    config=config,
                 )
             )
 
